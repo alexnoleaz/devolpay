@@ -57,16 +57,26 @@ public class ClientController {
             return ResponseEntity.notFound().build();
         }
 
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Client> deleteClient(@PathVariable String id){
-        return null;
+        boolean response = clientService.deleteById(id);
+
+        if(!response){
+            log.warn("Trying to delete a non existent client");
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping()
     public ResponseEntity<Client> deleteClients(){
-        return null;
+        log.info("Request to delete all clients");
+        clientService.deleteAll();
+        return ResponseEntity.noContent().build();
     }
 }
