@@ -32,14 +32,26 @@ public class ClientService implements BaseServices<Client> {
 
     @Override
     public Client update(Client entity) {
-        return clientRepository.update(entity);
+        var res = clientRepository.getById(entity.getId());
+        var clientUpdate = new Client();
+
+        if (res != null) {
+            clientUpdate.setId(entity.getId());
+            clientUpdate.setNames(entity.getNames() != null ? entity.getNames() : res.getNames());
+            clientUpdate.setLastnames(entity.getLastnames() != null ? entity.getLastnames() : res.getLastnames());
+            clientUpdate.setDni(entity.getDni() != null ? entity.getDni() : res.getDni());
+            clientUpdate.setPhone(entity.getPhone() != null ? entity.getPhone() : res.getPhone());
+            clientUpdate.setAddress(entity.getAddress() != null ? entity.getAddress() : res.getAddress());
+        }
+
+        return clientRepository.update(clientUpdate);
     }
 
     @Override
     public boolean deleteById(String id) {
         boolean exists = clientRepository.existsById(id);
 
-        if(exists) {
+        if (exists) {
             clientRepository.deleteById(id);
             return true;
         }

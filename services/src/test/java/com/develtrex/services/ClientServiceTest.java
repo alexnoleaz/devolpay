@@ -5,6 +5,9 @@ import com.develtrex.config.ServicesConfig;
 import com.develtrex.entities.Client;
 import lombok.extern.log4j.Log4j2;
 import org.junit.Test;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @RunWith(SpringRunner.class)
 @DataMongoTest
 @Log4j2
+@TestMethodOrder(OrderAnnotation.class)
 public class ClientServiceTest {
     // Fields
     @Autowired
@@ -27,6 +31,7 @@ public class ClientServiceTest {
 
     // Methods
     @Test
+    @Order(1)
     public void create() {
         log.info("Running create test");
         // Client a new client
@@ -44,6 +49,7 @@ public class ClientServiceTest {
     }
 
     @Test
+    @Order(2)
     public void getAll() {
         log.info("Running getAll test");
         var result = clientService.getAll();
@@ -58,6 +64,7 @@ public class ClientServiceTest {
     }
 
     @Test
+    @Order(3)
     public void getById() {
         log.info("Running getById test");
         var clientTest = clientService.getAll().get(0);
@@ -71,6 +78,7 @@ public class ClientServiceTest {
     }
 
     @Test
+    @Order(4)
     public void update() {
         log.info("Running update test");
 
@@ -90,6 +98,7 @@ public class ClientServiceTest {
     }
 
     @Test
+    @Order(5)
     public void deleteById() {
         log.info("Running deleteById test");
         var clientTest = clientService.getAll().get(1);
@@ -105,7 +114,8 @@ public class ClientServiceTest {
     }
 
     @Test
-    public void deleteAll(){
+    @Order(6)
+    public void deleteAll() {
         log.info("Running deleteAll test");
 
         var count = clientService.getAll().size();
