@@ -13,18 +13,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Log4j2
@@ -86,10 +82,20 @@ public class ClientControllerTest {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 
-        String client = "{ \"names\": \"Alexander\","+
-                            "\"email\": \"exemplo@exemplo.com\" }";
+        var client = new Client();
+        client.setNames("Alexander");
+        client.setLastnames("Nole");
+        client.setDni("61513129");
+        client.setPhone("937579505");
+        client.setAddress("Tumbes - Tumbes");
 
-        var response = testRestTemplate.postForEntity(uri + "clients",)
+        HttpEntity<Client> request = new HttpEntity<>(client,headers);
+
+        var response = testRestTemplate.postForEntity(uri + "clients",request,Client.class);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertEquals("Alexander", response.getBody().getNames());
     }
 
 }
